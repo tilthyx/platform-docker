@@ -1,0 +1,24 @@
+services:
+  db-platform:
+    restart: always
+    container_name: platform-db
+    image: postgres:15.9-alpine3.20
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${POSTGRES_DB}"
+    ports:
+      - "${POSTGRES_PORT}:5432"
+
+  db-origin:
+    restart: always
+    container_name: origin-db
+    image: postgres:15.9-alpine3.20
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: "${ORIGIN_USER}"
+      POSTGRES_PASSWORD: "${ORIGIN_PASSWORD}"
+      POSTGRES_DB: "${ORIGIN_DB}"
+    ports:
+      - "${ORIGIN_POSTGRES_PORT}:5432"
